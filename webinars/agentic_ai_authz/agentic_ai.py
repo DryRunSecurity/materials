@@ -23,16 +23,13 @@ class CustomSearchTool(BaseTool):
 
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
         """Use the tool."""
-        faiss_db_path = "../vector_databases/vtm_faiss"
+        faiss_db_path = "../vectordb/vtm_faiss"
         db = FAISS.load_local(
             faiss_db_path, 
             BedrockEmbeddings(model_id='amazon.titan-embed-text-v1'),
             allow_dangerous_deserialization=True
         )
         return db.similarity_search(query)
-
-    async def _arun(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
-        raise NotImplementedError("custom_search does not support async")
 
 # Define tools and LLM
 tools = [CustomSearchTool()]
@@ -84,8 +81,8 @@ Your final response must be in JSON format, containing the following fields:
 ```python
 @login_required
 def update_user(request):
-    user_id = request.GET.get('user_id')
-    User.objects.filter(id=user_id).update(is_active=False)
+    team_id = request.GET.get('team_id')
+    Team.objects.filter(id=user_id).update(is_active=False)
 
 TOOLS:
 ------
@@ -151,4 +148,4 @@ if __name__ == "__main__":
         User.objects.filter(id=user_id).update(is_active=False)
     """
     result = analyze_code(input_code)
-    print(result)
+
