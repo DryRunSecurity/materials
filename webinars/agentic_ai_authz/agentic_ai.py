@@ -9,7 +9,7 @@ from langchain_aws import BedrockEmbeddings
 from typing import Optional, Type
 from langchain.callbacks.manager import CallbackManagerForToolRun
 from dotenv import load_dotenv
-import os
+
 # Load environment variables
 load_dotenv()
 
@@ -35,7 +35,7 @@ class CustomSearchTool(BaseTool):
 tools = [CustomSearchTool()]
 llm = ChatBedrock(
     model_id='anthropic.claude-3-5-haiku-20241022-v1:0',
-    model_kwargs={"temperature": 0.1},
+    model_kwargs={"temperature": 0.6},
 )
 
 # Define instructions and prompt
