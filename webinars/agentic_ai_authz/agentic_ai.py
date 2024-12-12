@@ -23,7 +23,7 @@ class CustomSearchTool(BaseTool):
 
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
         """Use the tool."""
-        faiss_db_path = "../vectordb/vtm_faiss"
+        faiss_db_path = "./vectordb/vtm_faiss"
         db = FAISS.load_local(
             faiss_db_path, 
             BedrockEmbeddings(model_id='amazon.titan-embed-text-v1'),
@@ -35,7 +35,7 @@ class CustomSearchTool(BaseTool):
 tools = [CustomSearchTool()]
 llm = ChatBedrock(
     model_id='anthropic.claude-3-5-haiku-20241022-v1:0',
-    model_kwargs={"temperature": 0.6},
+    model_kwargs={"temperature": 0.1},
 )
 
 # Define instructions and prompt
@@ -66,9 +66,10 @@ IMPORTANT
 - A general authorization check (e.g., permissions to perform a generic action does not prevent IDOR unless it is tied to the specific database record being accessed or modified (e.g., the `user_id` in this case).
 - Always verify whether the authorization mechanism explicitly validates the record against the current user’s permissions.
 - If the authorization function is authorizing a user on something like a project but the IDOR exists because the user is looking up a User record, then its not enforcing authorzation AND IS INSECURE
+- Do not guess what a decorator does, always use the tool to verify the implementation of the decorator
 
 ### **TOOLS**
-You have access to a vector database to search for code-related information. When looking up custom functions, ensure an **exact match** on the function name and carefully review its implementation to determine whether it ensures record-level authorization.
+You have access to a vector database to search for code-related information. When looking up custom functions, ensure an **exact match** on the function name and carefully review its implementation to determine whether it ensures record-level authorization. Always use the tool to validate your assertions.
 
 ### **Output Format**
 Your final response must be in JSON format, containing the following fields:
